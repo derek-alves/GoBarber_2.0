@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useCallback, useRef}from 'react';
 import {
   View,
   Image,
@@ -23,8 +23,18 @@ import {
   CreateAccountButtonText
 } from './styles';
 import { ScrollView } from 'react-native-gesture-handler';
+import {useNavigation} from '@react-navigation/native';
+import {Form} from '@unform/mobile';
+import {FormHandles} from '@unform/core';
 
 const SignIn: React.FC = () => {
+
+  const navigation = useNavigation();
+  
+  const formRef = useRef<FormHandles>(null);
+
+  const handleSignIn = useCallback((data:Object) => {},[])
+
   return (
 
     <>
@@ -44,21 +54,27 @@ const SignIn: React.FC = () => {
             <Title>Faça seu logon</Title>
           </View> 
 
+      <Form ref={formRef} onSubmit={()=>{}}>  
           <Input name="email" icon="mail" placeholder="E-mail"/>
           <Input name="password" icon="lock" placeholder="Senha"/>
-        
-          <Button onPress={()=>{}}>Entrar</Button>
+      </Form>
+          <Button onPress={()=>{
+            formRef.current?.submitForm();
+          }}>Entrar</Button>
+     
 
+      
           <ForgotPassWord onPress={()=>{}}>
               <ForgotPassWordText>
                 Esqueci minha senha
               </ForgotPassWordText>
           </ForgotPassWord>
+       
         </Container>
       </ScrollView>
     </KeyboardAvoidingView>  
 
-        <CreateAccountButton onPress={()=>{}}>
+        <CreateAccountButton onPress={()=>navigation.navigate('SignUp')}>
             <Icon name="log-in" size={20} color="#ff9000"/>
             <CreateAccountButtonText>
                 Criar uma conta
