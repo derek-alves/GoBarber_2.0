@@ -4,7 +4,8 @@ import {
   Image,
   KeyboardAvoidingView,
   Keyboard,  
-  Platform
+  Platform,
+  TextInput
 } from 'react-native';
 
 import {Feather as Icon} from '@expo/vector-icons';
@@ -33,7 +34,11 @@ const SignIn: React.FC = () => {
   
   const formRef = useRef<FormHandles>(null);
 
-  const handleSignIn = useCallback((data:Object) => {},[])
+  const passwordInputRef = useRef<TextInput>(null);
+
+  const handleSignIn = useCallback((data:Object) => {
+    console.log(data)
+  },[])
 
   return (
 
@@ -54,9 +59,30 @@ const SignIn: React.FC = () => {
             <Title>Faça seu logon</Title>
           </View> 
 
-      <Form ref={formRef} onSubmit={()=>{}}>  
-          <Input name="email" icon="mail" placeholder="E-mail"/>
-          <Input name="password" icon="lock" placeholder="Senha"/>
+      <Form ref={formRef} onSubmit={handleSignIn}>  
+          <Input
+            autoCorrect={false}
+            autoCapitalize="none"
+            keyboardType="email-address"
+            name="email" 
+            icon="mail" 
+            placeholder="E-mail"
+            returnKeyType="next"
+            onSubmitEditing={() => {
+              passwordInputRef.current?.focus();
+            }}
+          />
+          <Input 
+            ref={passwordInputRef}
+            name="password" 
+            icon="lock"
+            placeholder="Senha"
+            secureTextEntry
+            returnKeyType="send"
+            onSubmitEditing={()=>{
+              formRef.current?.submitForm();
+            }}
+          />
       </Form>
           <Button onPress={()=>{
             formRef.current?.submitForm();
